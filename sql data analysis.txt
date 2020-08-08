@@ -1,0 +1,494 @@
+Data Scientist Role Play: Profiling and Analyzing the Yelp Dataset Coursera Worksheet
+
+Part 1: Yelp Dataset Profiling and Understanding
+
+1. Profile the data by finding the total number of records for each of the tables below:
+	
+i. Attribute table = 10000
+ii. Business table = 10000
+iii. Category table = 10000
+iv. Checkin table = 10000
+v. elite_years table = 10000
+vi. friend table = 10000
+vii. hours table = 10000
+viii. photo table = 10000
+ix. review table = 10000
+x. tip table = 10000
+xi. user table = 10000
+	
+
+
+2. Find the total distinct records by either the foreign key or primary key for each table. If two foreign keys are listed in the table, please specify which foreign key.
+
+i. Business = 10000 (ID)
+ii. Hours = 2052 (business_id)
+iii. Category = 2643(business_id)
+iv. Attribute = 1115(business_id)
+v. Review = 10000 (id)
+vi. Checkin = 493 (business_id)
+vii. Photo = 9493 (business_id)
+viii. Tip = 537 (User_id)
+ix. User = 10000 (ID)
+x. Friend = 9415 (friend_id)
+xi. Elite_years = 2780 (user_id)
+
+Note: Primary Keys are denoted in the ER-Diagram with a yellow key icon.	
+
+
+
+3. Are there any columns with null values in the Users table? Indicate "yes," or "no."
+
+	Answer: No
+	
+	
+	SQL code used to arrive at answer:
+	SELECT *
+FROM user
+WHERE compliment_photos IS NULL OR
+  compliment_writer IS NULL OR
+  compliment_funny IS NULL OR
+  compliment_cool IS NULL OR
+  compliment_plain IS NULL OR
+  compliment_note IS NULL OR
+  compliment_list IS NULL OR
+  compliment_cute IS NULL OR
+  compliment_profile IS NULL OR
+  compliment_more IS NULL OR
+  compliment_hot IS NULL OR
+  average_stars IS NULL OR
+  fans IS NULL OR
+  cool is null or
+  funny is null or
+  useful is null or
+  yelping_since is null or
+  review_count is null or
+  name is null
+	
+	
+
+	
+4. For each table and column listed below, display the smallest (minimum), largest (maximum), and average (mean) value for the following fields:
+
+	i. Table: Review, Column: Stars
+	
+		min:1	max:5	avg:3.7082
+		
+	
+	ii. Table: Business, Column: Stars
+	
+		min:1	max:5	avg:3.6549
+		
+	
+	iii. Table: Tip, Column: Likes
+	
+		min:0	max:2	avg:0.0144
+		
+	
+	iv. Table: Checkin, Column: Count
+	
+		min:1	max:53 avg: 1.9414
+		
+	
+	v. Table: User, Column: Review_count
+	
+		min:0	max:2000 		avg: 24.2995 
+		
+
+
+5. List the cities with the most reviews in descending order:
+
+	SQL code used to arrive at answer: 
+	
+	SELECT DISTINCT city,review_count
+	FROM business
+	GROUP BY city
+	ORDER BY review_count DESC
+	
+	Copy and Paste the Result Below:
+	+------------------------+--------------+
+| city                   | review_count |
++------------------------+--------------+
+| Woodmere Village       |          242 |
+| Mount Lebanon          |          138 |
+| Charlotte              |          120 |
+| McMurray               |          112 |
+| North York             |          109 |
+| Enterprise             |           89 |
+| Matthews               |           77 |
+| Munroe Falls           |           74 |
+| Ahwatukee              |           69 |
+| Pittsburgh             |           68 |
+| Woodmere               |           68 |
+| Tolleson               |           65 |
+| Pineville              |           63 |
+| Carnegie               |           61 |
+| Macedonia              |           58 |
+| Markham                |           54 |
+| Whitchurch-Stouffville |           52 |
+| Windsor                |           50 |
+| Goodyear               |           49 |
+| Gibsonia               |           45 |
+| Summerlin              |           44 |
+| Peninsula              |           42 |
+| Richfield              |           42 |
+| Dormont                |           40 |
+| nboulder city          |           40 |
++------------------------+--------------+
+	
+
+	
+6. Find the distribution of star ratings to the business in the following cities:
+
+i. Avon
+
+SQL code used to arrive at answer:
+SELECT 
+stars,
+review_count
+FROM business
+WHERE city = 'Avon'
+
+Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
+
++-------+--------------+
+| stars | review_count |
++-------+--------------+
+|   2.5 |            3 |
+|   4.0 |            4 |
+|   5.0 |            3 |
+|   3.5 |            7 |
+|   1.5 |           10 |
+|   3.5 |           31 |
+|   4.5 |           31 |
+|   3.5 |           50 |
+|   2.5 |            3 |
+|   4.0 |           17 |
++-------+--------------+
+
+ii. Beachwood
+
+SQL code used to arrive at answer:
+SELECT 
+stars,
+review_count
+FROM business
+WHERE city = 'Beachwood'
+
+
+Copy and Paste the Resulting Table Below (2 columns â€“ star rating and count):
++-------+--------------+
+| stars | review_count |
++-------+--------------+
+|   3.0 |            8 |
+|   3.0 |            3 |
+|   4.5 |           14 |
+|   5.0 |            6 |
+|   4.0 |           69 |
+|   4.5 |            3 |
+|   5.0 |            4 |
+|   2.0 |            8 |
+|   3.5 |            3 |
+|   3.5 |            3 |
+|   5.0 |            6 |
+|   2.5 |            3 |
+|   5.0 |            3 |
+|   5.0 |            4 |
++-------+--------------+	
+
+
+7. Find the top 3 users based on their total number of reviews:
+		
+	SQL code used to arrive at answer:
+	
+	SELECT count(user_id) AS count,
+	user_id
+	FROM review
+	group by user_id
+	ORDER BY count DESC
+		
+	Copy and Paste the Result Below:
++-------+------------------------+
+| count | user_id                |
++-------+------------------------+
+|     7 | CxDOIDnH8gp9KXzpBHJYXw |
+|     7 | U4INQZOPSUaj8hMjLlZ3KA |
+|     5 | 8teQ4Zc9jpl_ffaPJUn6Ew |
+|     5 | N3oNEwh0qgPqPP3Em6wJXw |
+|     5 | pMefTWo6gMdx8WhYSA2u3w |
+|     5 | yT_QCcnq-QGipWWuzIpvtw |
+|     4 | 3cC726zwgerKNNasnidAww |
+|     4 | AvC5XQAElcGAAn_Wr5auEg |
+|     4 | ELcQDlf69kb-ihJfxZyL0A |
+|     4 | N0qq4upibIRvLzE2SzVPtQ |
+|     4 | Q9mA60HnY87C1TW5kjAZ6Q |
+|     4 | RBZ_kMjowV0t6_nv2UKaDQ |
+|     4 | Tsm8VraTp5OGyVALtUiCeQ |
+|     4 | _AwABkxw1joJPXn-j9dNiA |
+|     4 | ffPY_bHX8vLebHu8LBEqfg |
+|     4 | gwIqbXEXijQNgdESVc07hg |
+|     4 | rCWrxuRC8_pfagpchtHp6A |
+|     3 | -PHC1ulwHkY4LEmMqmFwPg |
+|     3 | 0BBUmH7Krcax1RZgbH4fSA |
+|     3 | 0UI9KTPdtkwl9lMdMT-Sgg |
+|     3 | 1dWLN4Mr4hKhu8MQUCKqXQ |
+|     3 | 24AzZDQKHySwMQR7VQVCAg |
+|     3 | 5JVY32_bmTBfIGpCCsnAfw |
+|     3 | 62GNFh5FySkA3MbrQmnqvg |
+|     3 | 6Ki3bAL0wx9ymbdJqbSWMA |
++-------+------------------------+
+
+
+8. Does posing more reviews correlate with more fans?
+
+	Please explain your findings and interpretation of the results:
+	
+	
+	the table i derived is as following :
++-------------------+------------------------+------+
+| number_of_reviews | id                     | fans |
++-------------------+------------------------+------+
+|                 7 | -7QdOqkajxYzJFiw88a7ig |    3 |
+|                 7 | -7lwGMjJ6eObiC7snEBptw |   14 |
+|                 5 | -2sK9Q9x-pdg5HbsnZ4wAA |    7 |
+|                 5 | -7hOQNAgrR0vdTxUCBpi4A |    0 |
+|                 5 | -7nkvmRqbFgoxliR0Xd56w |    1 |
+|                 5 | -7c-t_pET7ttQ_Ww0_UnMw |    0 |
+|                 4 | -7FgnqIs4gbqWKjA2mic5A |    5 |
+|                 4 | -7k2qCuDLb1g4K-3zWnSoQ |    2 |
+|                 4 | -6LGwrr-TQRo8qiaNU7Ljw |    0 |
+|                 4 | -6aabdWFC578uyB-DaEe-A |    1 |
++-------------------+------------------------+------+
+	Here we can see there is no obvious correlation between fans and number of reviews written.
+	
+9. Are there more reviews with the word "love" or with the word "hate" in them?
+
+	Answer: there are 1780 reviews with the word LOVE in them, whereas there are only 232 words with thw word HATE on them
+
+	
+	SQL code used to arrive at answer:
+	--list with word love
+	SELECT *
+	FROM review
+	WHERE text LIKE '%love%'
+
+	--list with word HATE
+	SELECT *
+	FROM review
+	WHERE text LIKE '%hate%'
+
+	
+
+	
+	
+10. Find the top 10 users with the most fans:
+
+	SQL code used to arrive at answer:
+SELECT user_id,
+useful AS fans
+FROM review
+order by useful DESC
+LIMIT 10
+	
+	Copy and Paste the Result Below:
+
++------------------------+------+
+| user_id                | fans |
++------------------------+------+
+| 8DEyKVyplnOcSKx39vatbg |  106 |
+| Fv0e9RIV9jw5TX3ctA1WbA |   73 |
+| rKDLq635fyrmVzg4Gxkafg |   61 |
+| xsT4KZTu_KnOVavtuXn4RA |   58 |
+| qwONwL783a0hvPQl2TVWjg |   54 |
+| qewG3X2O4X6JKskxyyqFwQ |   54 |
+| BhzyAKdnUWh6mThFVU1Csg |   44 |
+| JQIZhoQB-Tg9hdBEj90m4g |   40 |
+| MSCVDZf_2AygHxLg-bz8kQ |   38 |
+| gZY7QToxCRtdx5m8isSRtw |   37 |
++------------------------+------+
+		
+
+Part 2: Inferences and Analysis
+
+1. Pick one city and category of your choice and group the businesses in that city or category by their overall star rating. Compare the businesses with 2-3 stars to the businesses with 4-5 stars and answer the following questions. Include your code.
+	
+i. Do the two groups you chose to analyze have a different distribution of hours?
+	No,there is no apparent difference between hours
+
+
+SELECT stars,hours
+FROM business b
+JOIN hours h ON
+      h.business_id = b.id
+WHERE city='Las Vegas' AND stars IN (2.5,3,3.5,4,4.5,5)
+order by stars
+
+
+
+ii. Do the two groups you chose to analyze have a different number of reviews?
+         Yes, the reviews from range 2 to 3 have average 64.5
+		 the reviews in range 4 to 5 have average of 130
+		 
+		 
+		 
+SELECT stars,review_count,AVG(review_count)
+FROM business b
+JOIN hours h ON
+      h.business_id = b.id
+WHERE city='Las Vegas' AND stars BETWEEN 4 and 5
+order by stars
+
+iii. Are you able to infer anything from the location data provided between these two groups? Explain.
+yes, the rating 4-5 have different locations like Southeast,Centennial,Summerlin,Chinatown,Spring Valley
+the location of 2-3 stars contains only Eastside
+
+SQL code used for analysis:
+
+SELECT distinct neighborhood
+FROM business b
+JOIN hours h ON
+      h.business_id = b.id
+WHERE city='Las Vegas' AND stars BETWEEN 4 and 5
+
+
+
+SELECT distinct neighborhood
+FROM business b
+JOIN hours h ON
+      h.business_id = b.id
+WHERE city='Las Vegas' AND stars BETWEEN 2 and 3
+
+		
+		
+2. Group business based on the ones that are open and the ones that are closed. What differences can you find between the ones that are still open and the ones that are closed? List at least two differences and the SQL code you used to arrive at your answer.
+		
+i. Difference 1: The reviews for open restaurants are more then closed restaurants
+         
+         
+ii. Difference 2: The cities are usually different where the restaurant is closed or open
+         
+         
+         
+SQL code used for analysis:
+--for open restaurants
+SELECT *
+FROM business b
+JOIN hours h ON
+      h.business_id = b.id
+WHERE is_open=1
+ORDER BY review_count DESC
+
+--for closed restaurants
+SELECT *
+FROM business b
+JOIN hours h ON
+      h.business_id = b.id
+WHERE is_open=0
+ORDER BY review_count DESC
+	
+	
+3. For this last part of your analysis, you are going to choose the type of analysis you want to conduct on the Yelp dataset and are going to prepare the data for analysis.
+
+Ideas for analysis include: Parsing out keywords and business attributes for sentiment analysis, clustering businesses to find commonalities or anomalies between them, predicting the overall star rating for a business, predicting the number of fans a user will have, and so on. These are just a few examples to get you started, so feel free to be creative and come up with your own problem you want to solve. Provide answers, in-line, to all of the following:
+	
+i. Indicate the type of analysis you chose to do:
+         The analysis i would do would be sentiment analysis which would cluster Data based on happy key words or sad/unhappy keywords and then rate then accordingly
+         
+ii. Write 1-2 brief paragraphs on the type of data you will need for your analysis and why you chose that data:
+                         i choose the data of business and reveiws for this purpose which should give us insights regarding the customer sentiments.
+						 Clustering the data into 2 groups can help us deterrmine the working of the retaurants and which restaurant is working good and whihc is not.
+						 which restaurant can improve in what sort and which restaurantdoes not need any improvements
+                  
+iii. Output of your finished dataset:
+
++-----------------------------------+--------------+-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+| name                              | review_count | stars |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              text | useful |
++-----------------------------------+--------------+-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+| John's Chinese BBQ Restaurant     |           30 |   3.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Primal Brewery                    |           42 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Valley Bone and Joint Specialists |            3 |   4.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Delmonico Steakhouse              |         1389 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                              My favorite steakhouse in Las Vegas, somewhere I know I can go and get a great steak and have a great atmosphere to share with friends or family.  I have been going to Delmonico since about four year ago and I have never been disappointed once. |      2 |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                          One of my favorite things about this place is every time I have made a reservation I have always got seated almost exactly on time.  This place is not cheap nor is it too overpriced compared to other steakhouses in Las Vegas that don't even come close to this one. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                      One of my favorite things is they have an great selection of scotches and bourbon, the have a separate menu for it and if you like either please make sure and check it out. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Give this place a try and know that I recommend it to everyone. |        |
+| Delmonico Steakhouse              |         1389 |   4.0 |                                                                                                                                                                                                                               Was excited to go here since it was Emerille's Steakhouse.  We had reservations for 8PM and waited at the bar while they got our table ready. The waiter was really nice and friendly.  They brought us bread which they placed individually on our plates. I started with the spinach and arugula salad, which was super good. I was glad to have had that in my stomach, since it took a while to get our steaks. |      0 |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                  I ordered the filet, medium and a side of asparagus.  The steak was seared a little too much and tasted a little burnt.  They also topped it off with a pad of butter.  By no means was it a bad steak, but for the price, I guess I expected more.  The asparagus was good but also very buttery.  Good food, but I have definitely had better. |        |
+| Delmonico Steakhouse              |         1389 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2012 Fall Restaurant Week Lunch #2.  |     12 |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                         Whether you're visiting Delmonico on a regular night, special occasion, or during Restaurant Week as I did, from the amazing lunch I had with extraordinary service and exceptional food, I'd recommend it to anyone. 4.5 stars at least. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                              We seem to be the first party seated for lunch. Our two servers worked well together, being knowledgeable, catering, and attentive from beginning to end. Even as more customers started to come in and they had more to attend to, they still did an amazing job making sure we were taken care of. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       What we put in our tummies: |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 (pictures posted) |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        1st Course |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           Traditional New Orleans |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 Chicken & Andouille Sausage Gumbo |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        2nd Course |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Butternut Squash Ravioli |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       Prime Cheeseburger w/ Bacon |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        3rd Course |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Emeril's Banana Cream Pie |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         Pecan Pie |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                       I'm no expert on gumbo, but I found it very tasty. Still steaming in individual serving pots, it was poured over rice table-side. Very nice touch. The burger was an enormous 11oz, well-seasoned, cooked medium as requested, hearty and meaty as burgers should be. Fries were just...fries. It was my first experience with butternut squash ravioli, and I loved it. Sage brown butter, toasted hazelnuts, and parmesan cheese made these raviolis sweet and flavorful. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       | The highlight of the food was unquestionably the desserts. I never order banana cream pie, but I'm a big believer in trying whatever is the signature item, especially when it's written "Emeril's Banana Cream Pie." I'm sure it's not made very traditionally, but OH MY GOSH. Made with sweet bananas, the pie filling felt more like a cheesecake. Topped with chocolate shavings, amazing crust, this dessert will be what I think of from this day forward when anyone says banana cream pie. You think the way I described it, how could the pecan pie even compete?! Well, it did! Served warm and moist, it was decadent and comforting. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                     I was beginning to wonder if the Restaurant Week event and menus were affecting my experiences at these places I've been eagerly wanting to try. I was very excited to participate, awaiting delicious gourmet food at a great price at a fine-dining establishment, helping a worthy cause.  |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                    Personally, I'm very happy to say Delmonico made me want to become a repeat customer, again and again. It's so hard not to give 5 stars, but I would want to experience dining here on a non-Restaurant Week to confidently say it was as amazing as I remembered this lunch.  |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           I'm very much looking forward to coming back. And soon! |        |
+| Delmonico Steakhouse              |         1389 |   4.0 |                                                                                                                                                                                                                                                                                                                                           My client took me here after the MAGIC Show and it was phenomenal! The steak danced in my mouth. Well not really but you get the picture. The salads and sides (asparagus, potatoes) were excellent. They also have a fine wine selection. This place takes steak on another level! Highly recommended! |      1 |
+| Great Clips                       |            9 |   3.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Famous Footwear                   |           10 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Eazor's Auto Salon                |            8 |   5.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Howl at the Moon                  |           44 |   3.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Pio Pio                           |          299 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       I have heard about this place for nearly as long as I have lived in the area and finally got to try it out. |      1 |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                I got the 1/4 Chicken with rice, beans and plantains. All of it was good but I wasn't blown away like people suggested I would be. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                       Honestly I found the chicken a little greasy, the sauces overly spicy where it was more of an accomplishment to eat rather than an enjoyable accomplice to the meal (and I regularly eat spicy food) and the beans to be not worth my time. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                  The plantains were delicious and the ther servers were very attentive. One nice thing that they did was they did not have enough plantains for both of our plates. So, they gave me my portion and put two on my friend's plate so they could get the meals out. They then brought a side plate with the rest of the plantains when they were finished. It was a well thought out move on the part of the staff. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    My friend had the chicken soup and said it was very very good especially when she spooned some broth into the rice and mashed in some avacado. |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           This place is certainly worth checking out, and a place I'll likely return to, but did not like enough to be a regular. |        |
+| Pio Pio                           |          299 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               The chicken is awesome! Specially, for the price. Service is quick. |      0 |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |        |
+|                                   |              |       |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     Update: Didn't have the same great experience on follow-up visits. Still, it's a good place for good chicken. |        |
+| Sunnyside Grill                   |           37 |   3.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| World Food Championships          |            5 |   3.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Lucky's Pet Grooming & Boutique   |           16 |   3.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Bath & Body Works                 |            3 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| The Bar At Bermuda & St. Rose     |          100 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Welch Physical Therapy            |            6 |   3.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Kabab House                       |           24 |   4.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Mm Mm Pizza                       |            7 |   4.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Lake Erie Nature & Science Center |           19 |   4.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Happy Moose Bar and Grill         |           61 |   3.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Q's Nails                         |            3 |   3.5 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
+| Hungry Howie's Pizza              |           12 |   3.0 |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              None |   None |
++-----------------------------------+--------------+-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------+
+         
+         
+iv. Provide the SQL code you used to create your final dataset:
+
+
+
+SELECT b.name,
+b.review_count,
+b.stars,
+r.text,
+r.useful
+FROM business b
+LEFT JOIN review r ON
+      b.id=r.business_id
+
